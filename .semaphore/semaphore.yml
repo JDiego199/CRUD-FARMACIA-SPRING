@@ -15,7 +15,8 @@ blocks:
             - createdb -U postgres -h localhost farmacia
             - psql -h localhost -U postgres -c "\l" | grep farmacia
             - sem-service status postgres
-    dependencies: []
+    dependencies:
+      - 'Block #5'
   - name: login
     dependencies:
       - BaseDeDatos
@@ -55,3 +56,12 @@ blocks:
         - name: Eliminar
           commands:
             - mvn -Dtest=TestsEliminarUsuario test
+  - name: 'Block #5'
+    dependencies: []
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - checkout
+            - sem-version java 17
+            - mvn package
