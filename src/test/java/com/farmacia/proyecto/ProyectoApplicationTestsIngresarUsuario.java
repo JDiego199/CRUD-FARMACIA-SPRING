@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author mota1
  */
 @SpringBootTest
-public class TestIngresarUsuario {
+public class ProyectoApplicationTestsIngresarUsuario {
     
     	@Test
 	public void IngresarUsuario() {
