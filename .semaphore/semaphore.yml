@@ -5,14 +5,6 @@ agent:
     type: e1-standard-2
     os_image: ubuntu2004
 blocks:
-  - name: Maven
-    task:
-      jobs:
-        - name: Build
-          commands:
-            - checkout
-            - sem-version java 17
-            - mvn -B package --file pom.xml
   - name: baseDeDatos
     task:
       jobs:
@@ -23,11 +15,14 @@ blocks:
             - createdb -U postgres -h localhost farmacia
             - psql -h localhost -U postgres -c "\l" | grep farmacia
             - sem-service status postgres
+    dependencies: []
   - name: login
     task:
       jobs:
         - name: login
           commands: []
+    dependencies:
+      - baseDeDatos
   - name: menu
     task:
       jobs:
@@ -35,7 +30,9 @@ blocks:
           commands: []
         - name: Medicamento
           commands: []
-  - name: TestUsuario
+    dependencies:
+      - login
+  - name: Test Usuario
     task:
       prologue:
         commands:
@@ -43,15 +40,41 @@ blocks:
           - sem-version java 17
           - mvn -B package --file pom.xml
       jobs:
-        - name: Ingresar
+        - name: Test Ingresar
           commands:
             - mvn -Dtest=ProyectoApplicationTestsIngresarUsuario test
-        - name: Buscar
+        - name: Test Buscar
           commands:
             - mvn -Dtest=ProyectoApplicationTestsBuscarUsuario test
-        - name: eliminar
+        - name: Test eliminar
           commands:
             - mvn -Dtest=TestEliminarUsuario test
-        - name: Modificar
+        - name: Test Modificar
           commands:
             - mvn -Dtest=TestModificarUsuario test
+    dependencies:
+      - baseDeDatos
+      - menu
+  - name: Test Medicamento
+    dependencies:
+      - baseDeDatos
+      - menu
+    task:
+      prologue:
+        commands:
+          - checkout
+          - sem-version java 17
+          - mvn -B package --file pom.xml
+      jobs:
+        - name: Test Ingresar
+          commands:
+            - mvn -Dtest=TestIngresarMedicamento test
+        - name: Test Buscar
+          commands:
+            - mvn -Dtest=TestBuscarMedicamento test
+        - name: Test Eliminar
+          commands:
+            - mvn -Dtest=TestEliminarMedicamento test
+        - name: Test Modificar
+          commands:
+            - mvn -Dtest=TestModificarMedicamento test
