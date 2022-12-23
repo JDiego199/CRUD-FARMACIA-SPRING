@@ -13,3 +13,45 @@ blocks:
             - checkout
             - sem-version java 17
             - mvn -B package --file pom.xml
+  - name: baseDeDatos
+    task:
+      jobs:
+        - name: iniciar
+          commands:
+            - 'sem-service start postgres '
+            - sudo apt-get install -y -qq postgresql-client
+            - createdb -U postgres -h localhost farmacia
+            - psql -h localhost -U postgres -c "\l" | grep farmacia
+            - sem-service status postgres
+  - name: login
+    task:
+      jobs:
+        - name: login
+          commands: []
+  - name: menu
+    task:
+      jobs:
+        - name: Usuario
+          commands: []
+        - name: Medicamento
+          commands: []
+  - name: TestUsuario
+    task:
+      prologue:
+        commands:
+          - checkout
+          - sem-version java 17
+          - mvn -B package --file pom.xml
+      jobs:
+        - name: Ingresar
+          commands:
+            - mvn -Dtest=ProyectoApplicationTestsIngresarUsuario test
+        - name: Buscar
+          commands:
+            - mvn -Dtest=ProyectoApplicationTestsBuscarUsuario test
+        - name: eliminar
+          commands:
+            - mvn -Dtest=TestEliminarUsuario test
+        - name: Modificar
+          commands:
+            - mvn -Dtest=TestModificarUsuario test
