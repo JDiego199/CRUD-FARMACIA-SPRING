@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author mota1
  */
 @SpringBootTest
-public class TestBuscarUsuario {
+public class ProyectoApplicationTestsBuscarUsuario {
     
     @Test
     public void BuscarUsuario() {
