@@ -45,7 +45,7 @@ blocks:
       jobs:
         - name: Ingresar
           commands:
-            - mvn -Dtest=TestsIngresarUsuario test
+            - mvn -Dtest=ProyectoApplicationTestsIngresarUsuario test
         - name: Modificar
           commands:
             - mvn -Dtest=TestsModificarUsuario test
